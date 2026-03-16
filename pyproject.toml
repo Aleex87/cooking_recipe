@@ -1,0 +1,11 @@
+[project]
+name = "cooking-recipe"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "langchain>=1.2.12",
+    "openai>=2.28.0",
+    "python-dotenv>=1.2.2",
+]
