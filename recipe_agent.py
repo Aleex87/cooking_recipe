@@ -2,54 +2,50 @@ from langchain_ollama import ChatOllama
 
 
 class CookingRecipeAgent:
-    """
-    CookingRecipeAgent suggests recipes based on ingredients provided by the user.
-    It uses a local LLM via Ollama.
-    """
 
     def __init__(self):
-        # Initialize the local LLM model
-        self.model = ChatOllama(model="llama3")
 
-        # System instructions for the agent
+        self.model = ChatOllama(
+            model="llama3"
+            
+            )
+
+
+
         self.system_prompt = """
-        You are a helpful cooking assistant.
+                You are an AI cooking assistant.
 
-        Your task is to suggest recipes based on ingredients provided by the user.
+                Your goal is to help users create simple recipes using the ingredients they already have.
 
-        Always include:
-        - Recipe name
-        - Ingredient list
-        - Step-by-step cooking instructions
+                TASK
+                Generate a recipe suggestion based on the user's ingredients.
 
-        Respect dietary restrictions if provided.
-        """
+                CONSTRAINTS
+                - Prefer recipes that use the provided ingredients
+                - Respect dietary preferences if provided
+                - Keep recipes simple and practical
+                - Avoid unnecessary ingredients
 
-    def get_recipe(self, ingredients: str, diet: str) -> str:
-        """
-        Generate a recipe using the provided ingredients.
-        """
+                OUTPUT FORMAT
+                Recipe Name:
+                Ingredients:
+                Steps:
+                """
+    def stream_recipe(self, ingredients: str, diet: str):
 
         prompt = f"""
-        The user has the following ingredients:
-
+        Ingredients:
         {ingredients}
 
-         Dietary preference:
+        Dietary preference:
         {diet}
 
-        Suggest a recipe that respects the dietary preference if possible.
+        Suggest a recipe using these ingredients and respecting the diet.
         """
 
-        print("\n🤖 Generating recipe...\n")
+        # stream from the model
+        raw_stream = self.model.stream(self.system_prompt + prompt)
 
-        full_response = ""
-
-        for chunk in self.model.stream(self.system_prompt + prompt):
-            text = chunk.content
-            print(text, end="", flush=True)
-            full_response += text
-
-        print("\n")
-
-        return full_response
+        # convert to LangGraph-like stream format
+        for chunk in raw_stream:
+            yield ("messages", (chunk, {"langgraph_node": "model"}))
