@@ -3,22 +3,26 @@ from utils.stream_utils import handle_stream, log_input, log_output
 
 
 def main():
-    print("\nCooking Recipe Agent\n")
+
+    print("\nCooking Recipe Agent (conversation mode)")
+    print("Type 'exit' to stop.\n")
 
     agent = CookingRecipeAgent()
 
-    ingredients = input("Enter the ingredients you have: ")
-    diet = input("Dietary preference (vegan, vegetarian, gluten-free, none): ")
+    while True:
 
-    user_input = f"Ingredients: {ingredients} | Diet: {diet}"
+        user_input = input("You: ")
 
-    log_input(user_input, agent_name="CookingAgent")
+        if user_input.lower() in ["exit", "quit"]:
+            break
 
-    stream = agent.stream_recipe(ingredients, diet)
+        log_input(user_input, agent_name="CookingAgent")
 
-    final_response = handle_stream(stream, agent_name="CookingAgent")
+        stream = agent.stream_recipe(user_input)
 
-    log_output(final_response, agent_name="CookingAgent")
+        response = handle_stream(stream, agent_name="CookingAgent")
+
+        log_output(response, agent_name="CookingAgent")
 
 
 if __name__ == "__main__":

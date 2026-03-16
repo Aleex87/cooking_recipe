@@ -1,177 +1,160 @@
-# 🍳 Cooking Recipe Agent
+# Cooking Recipe Agent
 
-A simple AI cooking assistant built with **Python**, **LangChain**, and a **local LLM using Ollama**.
+This project implements a simple AI agent that suggests cooking recipes based on ingredients provided by the user.
 
-This agent suggests a recipe based on ingredients provided by the user.  
-It generates:
+The agent uses a Large Language Model hosted on a remote Ollama server and streams the generated output to the terminal with structured logging.
 
-- A **recipe name**
-- An **ingredient list**
-- **Step-by-step cooking instructions**
-
-The project demonstrates how to build a simple **AI agent that solves a real-world problem**: helping people decide what to cook using ingredients they already have at home.
+The goal of the project is to demonstrate how an AI agent can solve a real-world problem: helping users decide what to cook using ingredients they already have at home.
 
 ---
 
-# 📌 Project Overview
+# Project Overview
 
-Many people open the fridge and do not know what to cook with the ingredients available.
+Users often have ingredients available but do not know what recipe they can prepare with them.
 
-This agent solves that problem by:
+This agent addresses that problem by:
 
 1. Asking the user which ingredients they have
-2. Sending the ingredients to a local language model
-3. Generating a recipe suggestion
-4. Printing the result in the terminal
+2. Asking for dietary preferences
+3. Sending the information to a language model
+4. Generating a recipe suggestion
+5. Streaming the result to the terminal
 
-The model runs **locally**, so no paid API keys are required.
-
----
-
-# 🧰 Technologies Used
-
-- **Python**
-- **uv** (Python package manager and environment manager)
-- **LangChain**
-- **Ollama**
-- **Llama3** (local language model)
+The system supports structured prompts and configurable model parameters such as temperature and top-p.
 
 ---
 
-# 📁 Project Structure
+# Technologies Used
+
+Python  
+LangChain  
+Ollama  
+uv (Python environment manager)  
+Remote LLM server (Nackademin infrastructure)
+
+---
+
+# Project Structure
 
 ```
 cooking_recipe/
 │
 ├── main.py
 ├── recipe_agent.py
+├── .env
+├── utils/
+│   └── stream_utils.py
+│
 ├── pyproject.toml
 ├── uv.lock
-├── README.md
-└── .gitignore
+└── README.md
 ```
 
-### File Description
+## File Description
 
-| File | Purpose |
-|-----|--------|
-| `main.py` | Starts the program and interacts with the user |
-| `recipe_agent.py` | Contains the AI agent logic |
-| `pyproject.toml` | Project configuration and dependencies |
-| `uv.lock` | Locked dependency versions |
-| `README.md` | Project documentation |
+main.py  
+Entry point of the application. Handles user input and agent execution.
+
+recipe_agent.py  
+Defines the CookingRecipeAgent and configures the language model.
+
+utils/stream_utils.py  
+Utility file provided by the course to display streaming output and logging.
+
+.env  
+Stores configuration for the remote Ollama server and authentication token.
+
+pyproject.toml  
+Project dependencies managed by uv.
+
+uv.lock  
+Dependency lock file.
 
 ---
 
-# ⚙️ Installation Guide
+# Installation
 
-Follow these steps to reproduce the same environment and run the project.
+## 1 Clone the Repository
 
----
-
-# 1️⃣ Clone the Repository
-
-```bash
-git clone <your-repository-url>
+```
+git clone <repository-url>
 cd cooking_recipe
 ```
 
-Replace `<your-repository-url>` with your GitHub repository URL.
-
 ---
 
-# 2️⃣ Install UV
+## 2 Install uv
 
-If you do not have **uv** installed yet, install it first.
+If uv is not installed:
 
-### Windows (PowerShell)
+Windows (PowerShell)
 
-```powershell
+```
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-### macOS / Linux
+macOS / Linux
 
-```bash
+```
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 Verify installation:
 
-```bash
+```
 uv --version
 ```
 
 ---
 
-# 3️⃣ Create the Project Environment
+## 3 Install Dependencies
 
-Recreate the environment using:
+Create the environment and install dependencies:
 
-```bash
+```
 uv sync
 ```
 
-This command will:
+---
 
-- Create the virtual environment
-- Install all dependencies
-- Ensure the environment matches the project configuration
+# Environment Configuration
+
+Create a `.env` file in the root directory.
+
+Example:
+
+```
+OLLAMA_BASE_URL=http://nackademin.icedc.se
+OLLAMA_BEARER_TOKEN=your-token-here
+
+```
+
+## Variables
+
+OLLAMA_BASE_URL  
+URL of the remote Ollama server.
+
+OLLAMA_BEARER_TOKEN  
+Authentication token required by the server.
+
+OLLAMA_MODEL  
+Model used by the agent.  
+Example: llama3.1:8b
 
 ---
 
-# 4️⃣ Install Ollama
+# Running the Application
 
-Download and install **Ollama** from:
-
-https://ollama.com
-
-After installation verify it works:
-
-```bash
-ollama --version
-```
-
----
-
-# 5️⃣ Download the Language Model
-
-Download the Llama3 model locally:
-
-```bash
-ollama pull llama3
-```
-
-This may take several minutes because the model is large.
-
-You can test it with:
-
-```bash
-ollama run llama3
-```
-
-You should see an interactive prompt.
-
-Exit with:
+Run the agent with:
 
 ```
-/exit
-```
-
----
-
-# ▶️ Running the Application
-
-After completing the setup, run the agent with:
-
-```bash
 uv run python main.py
 ```
 
 You will see:
 
 ```
-🍳 Cooking Recipe Agent
+Cooking Recipe Agent
 
 Enter the ingredients you have:
 ```
@@ -179,137 +162,73 @@ Enter the ingredients you have:
 Example input:
 
 ```
-eggs, cheese, bread
+pasta, tomato, olive oil
 ```
 
-The AI agent will generate a recipe based on the ingredients.
-
----
-
-# 🤖 How the Agent Works
-
-### Step 1
-
-The user starts the application.
-
-### Step 2
-
-The program asks for available ingredients.
-
-### Step 3
-
-The ingredients are sent to the AI agent.
-
-### Step 4
-
-The local LLM analyzes the ingredients.
-
-### Step 5
-
-The model generates a recipe suggestion.
-
-### Step 6
-
-The recipe is printed in the terminal.
-
----
-
-# 🧠 Agent Design
-
-This project implements a simple AI agent.
-
-### Environment
-The user's kitchen and available ingredients.
-
-### Perception
-The list of ingredients provided by the user.
-
-### Processing
-A local language model interprets the ingredients.
-
-### Action
-The agent generates a cooking recipe.
-
-### Goal
-Help users cook meals using ingredients they already have.
-
----
-
-# 🧾 Example Output
-
-### User Input
+Diet preference:
 
 ```
-pasta, tomatoes, garlic
+none
 ```
 
-### Example Recipe Generated
-
-```
-Recipe: Garlic Tomato Pasta
-
-Ingredients
-- pasta
-- tomatoes
-- garlic
-- olive oil
-- salt
-
-Steps
-1. Boil the pasta in salted water.
-2. Heat olive oil in a pan.
-3. Add chopped garlic and cook briefly.
-4. Add chopped tomatoes and simmer.
-5. Mix the pasta with the sauce.
-6. Serve hot.
-```
-
-The exact output may vary because the recipe is generated by the AI model.
+The agent will then stream the generated recipe.
 
 ---
 
+# Agent Behavior
 
+The agent is guided by a structured prompt.
 
+The prompt includes:
 
+Role  
+The agent acts as an AI cooking assistant.
 
+Task  
+Generate a recipe using available ingredients.
 
+Constraints  
 
-# 📦 Dependencies
+Prefer recipes that use provided ingredients.  
+Respect dietary preferences if provided.  
+Keep recipes simple and practical.  
 
-Main dependencies used in this project:
+Output Format
 
-- `langchain`
-- `langchain-ollama`
-
-These are installed automatically when running:
-
-```bash
-uv sync
-```
-
----
-
-# ⚠️ Notes
-
-- No OpenAI API key is required.
-- The model runs locally using Ollama.
-- Response time depends on your hardware.
-- First responses may take longer.
+Recipe Name  
+Ingredients  
+Steps  
 
 ---
 
-# 🚀 Possible Improvements
+# Model Parameters
 
-Future improvements could include:
+The model is configured with sampling parameters.
 
-- Ingredient substitution suggestions
-- Detection of missing ingredients
-- Difficulty levels for recipes
-- Graphical user interface
-- Tool-based LangChain agent
+Temperature: 0.4  
+Controls randomness and creativity.
+
+Top-p: 0.9  
+Controls nucleus sampling for token selection.
+
+These parameters were tested to observe differences in recipe generation.
 
 ---
+## Conversational Memory
 
-# 👨‍💻 Author
+The agent maintains a conversation history to support multi-turn interactions.
+
+Each new user message is combined with previous messages and sent to the language model.  
+This allows the agent to remember context and continue the conversation coherently.
+
+Example:
+
+User: I have pasta and tomato  
+Agent: Suggests a recipe  
+
+User: Can you make it vegan?  
+Agent: Modifies the previous recipe accordingly.
+
+# Author
 
 Alessandro Abbate
