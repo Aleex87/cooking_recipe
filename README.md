@@ -298,7 +298,6 @@ Future improvements could include:
 
 - Ingredient substitution suggestions
 - Detection of missing ingredients
-- Dietary filters (vegan, gluten-free)
 - Difficulty levels for recipes
 - Graphical user interface
 - Tool-based LangChain agent

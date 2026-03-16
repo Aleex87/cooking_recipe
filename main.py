@@ -8,8 +8,10 @@ def main():
     agent = CookingRecipeAgent()
 
     ingredients = input("Enter the ingredients you have: ")
+    diet = input("Dietary preference (vegan, gluten-free, vegetarian, none): ")
 
-    recipe = agent.get_recipe(ingredients)
+
+    recipe = agent.get_recipe(ingredients, diet)
 
     print("\nSuggested recipe:\n")
     print(recipe)
