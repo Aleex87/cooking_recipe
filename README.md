@@ -197,7 +197,13 @@ Output Format
 
 Recipe Name  
 Ingredients  
-Steps  
+Steps 
+
+The agent includes a tool for ingredient substitution.
+
+When the user indicates that an ingredient is missing, 
+the agent calls the substitution tool and incorporates 
+the result into the prompt before generating the final recipe.
 
 ---
 
