@@ -6,26 +6,24 @@ load_dotenv()
 
 
 class CookingRecipeAgent:
-
     def __init__(self):
-
         base_url = os.getenv("OLLAMA_BASE_URL")
         bearer_token = os.getenv("OLLAMA_BEARER_TOKEN")
 
+        # Configure headers only if a token exists
         client_kwargs = {}
-
         if bearer_token:
             client_kwargs["headers"] = {
                 "Authorization": f"Bearer {bearer_token}"
             }
 
         self.model = ChatOllama(
-            model="llama3",
-            base_url=base_url,
-            client_kwargs=client_kwargs if client_kwargs else None,
-            temperature=0.4,
-            top_p=0.9
-        )
+        model="llama3.1:8b",
+        base_url=base_url,
+        client_kwargs=client_kwargs if client_kwargs else None,
+        temperature=0.9,
+        top_p=0.1
+    )
 
         self.system_prompt = """
 You are an AI cooking assistant.
@@ -48,7 +46,6 @@ Steps:
 """
 
     def stream_recipe(self, ingredients: str, diet: str):
-
         prompt = f"""
 Ingredients:
 {ingredients}
@@ -61,6 +58,7 @@ Suggest a recipe using these ingredients and respecting the diet.
 
         raw_stream = self.model.stream(self.system_prompt + prompt)
 
+        # Convert to the format expected by stream_utils
         for chunk in raw_stream:
             yield ("messages", (chunk, {"langgraph_node": "model"}))
             

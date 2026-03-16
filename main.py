@@ -3,7 +3,6 @@ from utils.stream_utils import handle_stream, log_input, log_output
 
 
 def main():
-
     print("\nCooking Recipe Agent\n")
 
     agent = CookingRecipeAgent()
@@ -24,3 +23,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
